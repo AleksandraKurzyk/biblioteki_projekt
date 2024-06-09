@@ -17,7 +17,7 @@ class LoginPage:
         }
 
         # Widok okna
-        self.root = Tk()
+        self.root = Tk() #tworzenie nowego okna głównego aplikacji GUI
         self.root.resizable(False, False)
         self.root.title("Moja biblioteka - Warszawa")
         self.root.geometry("400x180")
