@@ -117,6 +117,13 @@ class ApplicationPage:
         self.aktualna_klasa.lista_obiektow.pop(self.znajdz_wybrany_obiekt()[0])
         self.odswiez_liste_obiektow()
 
+    # Funkcja odpowiada za znalezienie zaznaczonego obiektu w liście wszystkich obiektow w celu jego poprawnej edycji.
+    def znajdz_wybrany_obiekt(self):
+        for index, aktualny_obiekt in enumerate(self.aktualna_klasa.lista_obiektow):
+            if self.listbox_lista_obiektow.get(ACTIVE) == aktualny_obiekt.toString():
+                return (index, aktualny_obiekt)  # Funkcja zwraca index listy oraz znaleziony obiekt.
+
+    # Po zaktualizowaniu danych wszystkie wyświetlane elementy sa aktualizowane/odświeżane
     def odswiez_liste_obiektow(self):
         # Jesli mapa nie zostala jeszcze zaladowana, to ją uruchom.
         self.uruchom_mape() if self.map_widget is None else ''
@@ -124,6 +131,37 @@ class ApplicationPage:
         self.map_widget.delete_all_marker()
         # Usun wszystkie obiekty na liscie obiektow
         self.listbox_lista_obiektow.delete(0, END)
+
+        # Jesli aktualnie wyswietlane sa Biblioteki to usun filtr wyboru bibliotek
+        if self.aktualna_klasa == Biblioteki and self.ramka_filtr is not None:
+            self.ramka_filtr.destroy()
+            self.ramka_filtr = None
+        # Jesli aktualne nie sa wyswietane Biblioteki, a filtr wyboru bibliotek jest ukryty to go utworz
+        elif self.aktualna_klasa != Biblioteki and self.ramka_filtr is None:
+            # Zlec uruchomienie filtra.
+            self.uruchom_filtr_bibiotek()
+            # Wyczysc dane filtra bibliotek
+            self.filtr_bibliotek.delete(0, END)
+            # Utworz nowa liste filtru bibliotek
+            lista_do_filtru = list(map(lambda cur_bib: cur_bib.get_nazwa_na_mape(), Biblioteki.lista_obiektow))
+            lista_do_filtru.append("Wszystkie")  # Do aktualnej listy bibliotek dodaj do wyboru "Wszystkie"
+            self.filtr_bibliotek.config(values=lista_do_filtru)  # Ustaw nową listę
+        # Przejdz po wszystkich dostepnych obiektach danej klasy i zapamietaj pozycje danego elementu.
+        for idx, aktualny_obiekt in enumerate(self.aktualna_klasa.lista_obiektow):
+            # Wyswietl na mapie i dodaj do listy obiektow jesli:
+            #  - teraz sa wyswietlane biblioteki,
+            #  - filtr jest ustawiony na wyswietlenie wsszystkego
+            #  - dany obiekt zgadza sie z filtrem
+            if self.aktualna_klasa == Biblioteki or \
+                    self.filtr_bibliotek.get() == "Wszystkie" or \
+                    self.filtr_bibliotek.get() == aktualny_obiekt.get_biblioteka():
+                # Ustaw znaczek na mapie
+                self.map_widget.set_position(aktualny_obiekt.get_deg_x(),
+                                             aktualny_obiekt.get_deg_y(),
+                                             marker=True,
+                                             text=aktualny_obiekt.get_nazwa_na_mape())
+                # Dodaj do listy elementow opis danego obiektu.
+                self.listbox_lista_obiektow.insert(idx, aktualny_obiekt.toString())
 
     def uruchom_mape(self):
         # Utworzenie i ustawienie szczegolow mapy

@@ -26,6 +26,18 @@ class Biblioteki:
         self.location = location
         self.deg_x, self.deg_y = get_wspolrzedne(location)
 
+    # Funkcja zwracająca nazwe bilioteki
+    def get_nazwa_na_mape(self):
+        return self.nazwa_bilioteki
+
+    # Funkcja zwraca wsporzedne X danej biblioteki
+    def get_deg_x(self):
+        return self.deg_x
+
+    # Funkcja zwraca wsporzedne Y danej biblioteki
+    def get_deg_y(self):
+        return self.deg_y
+
     # Opisy dla menu dodawania obiektu
     def labelki_pod_dodanie_obiektu():
         return {
@@ -36,6 +48,10 @@ class Biblioteki:
             "L - entry 4": False,
             "L - button": "Dodaj biblioteke",
         }
+
+    # Wyswietlanie danych obiektu
+    def toString(self):
+        return f"{self.nazwa_bilioteki} ; {self.location}"
 
 
 class Klienci:
@@ -49,6 +65,25 @@ class Klienci:
         self.biblioteka = biblioteka
         self.deg_x, self.deg_y = get_wspolrzedne(location)
 
+    # Funkcja zwraca imie i nazwisko klienta
+    def get_nazwa_na_mape(self):
+        return f'{self.name} {self.surname}'
+
+        # Funkcja zwraca nazwe bilioteki do której dany klient jest przypisany.
+
+    def get_biblioteka(self):
+        return self.biblioteka
+
+        # Funkcja zwraca wsporzedne X danego klienta.
+
+    def get_deg_x(self):
+        return self.deg_x
+
+        # Funkcja zwraca wsporzedne Y danego klienta.
+
+    def get_deg_y(self):
+        return self.deg_y
+
     # Opisy dla menu dodawania obiektu
     def labelki_pod_dodanie_obiektu():
         return {
@@ -59,6 +94,10 @@ class Klienci:
             "L - entry 4": False,
             "L - button": "Dodaj biblioteke",
         }
+
+    # Wyświetlanie danych obiektu
+    def toString(self):
+        return f"{self.name} {self.surname} ; {self.location} ; {self.biblioteka}"
 
 
 class Pracownicy:
@@ -72,6 +111,26 @@ class Pracownicy:
         self.biblioteka = biblioteka
         self.deg_x, self.deg_y = get_wspolrzedne(location)
 
+    # Funkcja zwraca imie i nazwisko pracownika
+
+    def get_nazwa_na_mape(self):
+        return f'{self.name} {self.surname}'
+
+        # Funkcja zwraca nazwe bilioteki do ktorek dany pracownik jest przypisany.
+
+    def get_biblioteka(self):
+        return self.biblioteka
+
+        # Funkcja zwraca wsporzedne X danego praconwika.
+
+    def get_deg_x(self):
+        return self.deg_x
+
+    # Funkcja zwraca wsporzedne Y danego praconwika.
+
+    def get_deg_y(self):
+        return self.deg_y
+
     # Opisy dla menu dodawania obiektu
     def labelki_pod_dodanie_obiektu():
         return {
@@ -82,3 +141,7 @@ class Pracownicy:
             "L - entry 4": False,
             "L - button": "Dodaj biblioteke",
         }
+
+    # Wysiwtlenie danych obiektu
+    def toString(self):
+        return f"{self.name} {self.surname} ; {self.location} ; {self.biblioteka}"
