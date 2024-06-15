@@ -98,6 +98,27 @@ class ApplicationPage:
         # Przybliż widok mapy na punkcie
         self.map_widget.set_zoom(18)
 
+        # Funkcja odpowiedzialna za wyswietlenie filtru bibliotek, wyświetla po kliknięciu w Pracownika lub klienta
+
+    def uruchom_filtr_bibiotek(self):
+        self.ramka_filtr = Frame(self.root)  # Utworzenie ramki dla filtru
+        self.ramka_filtr.grid(row=0, column=2, columnspan=3)  # Ustalenie polozenia ramki w okienku
+        # Utworzenie opisow dla filtru
+        label_tytul = Label(self.ramka_filtr, text="Filtr Bibliotek")
+        label_1 = Label(self.ramka_filtr, text="Biblioteka: ")
+        # Utworzenie rozwijanego menu do wyboru interesującej nas biblioteki
+        self.filtr_bibliotek = ttk.Combobox(self.ramka_filtr, state="readonly", values=["Wszystkie"], width=35)
+        # Ustalenie ktory element ma byc aktualnie wybrany, domyślnie pierwszy w kolejce
+        self.filtr_bibliotek.current(0)
+        # Podpiecie funkcji ktora ma sie uruchomic("self.odswiez_liste_obiektow()) po zmianie zaznaczonego elementu w filtrze
+        self.filtr_bibliotek.bind("<<ComboboxSelected>>", lambda _: self.odswiez_liste_obiektow())
+
+        # Ulożenie elementów w okienku
+        label_tytul.grid(row=0, column=1)
+        label_1.grid(row=1, column=0)
+        self.filtr_bibliotek.grid(row=1, column=2)
+
+
     # Funkcja do dodawania znaczka po nacisnieciu na mape
     def event_prawy_przycisk_na_mapie(self, deg_xy):
         PopUpMenu(self.odswiez_liste_obiektow, self.aktualna_klasa, self.aktualna_klasa.labelki_pod_dodanie_obiektu(),
@@ -115,6 +136,21 @@ class ApplicationPage:
     # Usuwanie zaznaczonego obiektu
     def usun_obiekt(self):
         self.aktualna_klasa.lista_obiektow.pop(self.znajdz_wybrany_obiekt()[0])
+        self.odswiez_liste_obiektow()
+
+    # Zmiana między obiektami (Biblioteki, Klienci, Pracownicy)
+    def zmiana_listy(self, nowa_lista):
+        # Spis dostepnych klas obiektow
+        spis_klas = {
+            "Biblioteki": Biblioteki,
+            "Pracownicy": Pracownicy,
+            "Klienci": Klienci
+        }
+        # Zmiana klasy obiektow
+        self.aktualna_klasa = spis_klas[nowa_lista]
+        # Aktualizacja opisu obecnego wyboru nad przyciskami Biblioteka, Prawonicy, Klienci
+        self.label_aktalna_lista.config(text=f"Wybór aktualnego wyswietlania: (Aktualne {nowa_lista})")
+        # Przeladowanie wszystkich dynamicznych/zmieniających się elemetow na ekranie
         self.odswiez_liste_obiektow()
 
     # Funkcja odpowiada za znalezienie zaznaczonego obiektu w liście wszystkich obiektow w celu jego poprawnej edycji.
@@ -189,14 +225,14 @@ class ApplicationPage:
         Klienci.lista_obiektow.append(
             Klienci("Ela", "Dzidowska", "10 Smolna, Warszawa", "Biblioteka Publiczna Praga-Południe"))
         Klienci.lista_obiektow.append(
-            Klienci("Zbychu", "Rychu", "15 Bystra, Warszawa", "Biblioteka Publiczna Środmieście"))
+            Klienci("Ola", "Kurzyk", "15 Bystra, Warszawa", "Biblioteka Publiczna Środmieście"))
 
         Pracownicy.lista_obiektow.append(
-            Pracownicy("Michal", "Zdychal", "25 Chmielna, Warszawa", "Biblioteka Główna Województwa Mazowieckiego"))
+            Pracownicy("Michal", "Babiński", "25 Chmielna, Warszawa", "Biblioteka Główna Województwa Mazowieckiego"))
         Pracownicy.lista_obiektow.append(
             Pracownicy("Tomek", "Atomek", "50 Długa, Warszawa", "Biblioteka Publiczna Praga-Południe"))
         Pracownicy.lista_obiektow.append(
-            Pracownicy("Kajtek", "Majtek", "75 Krótka, Warszawa", "Biblioteka Publiczna Środmieście"))
+            Pracownicy("Kajetan", "Nowak", "75 Krótka, Warszawa", "Biblioteka Publiczna Środmieście"))
 
         # Na koncu odświerz GUI.
         self.odswiez_liste_obiektow()
